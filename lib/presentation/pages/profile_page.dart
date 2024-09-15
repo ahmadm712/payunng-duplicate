@@ -329,400 +329,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   // * STEP 1
                   firstStep(context, profile, profileCubit),
                   // * STEP 2
-                  Step(
-                    isActive: currentStep >= 1,
-                    title: const SizedBox(),
-                    content: Column(
-                      children: [
-                        InkWell(
-                          onTap: () => _pickImage(profile, profileCubit),
-                          child: Row(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(right: 12.0),
-                                height: 40,
-                                width: 40,
-                                child: Icon(
-                                  Icons.camera_front_rounded,
-                                  color: primaryColor,
-                                  size: 40,
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text('Upload KTP'),
-                                  Visibility(
-                                    visible: _ktpPicture != null,
-                                    child: Text(
-                                      '${getFileName(_ktpPicture?.path ?? '')}.${getFileExtension(_ktpPicture?.path ?? '')}',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const Spacer(),
-                              Visibility(
-                                visible: _ktpPicture != null,
-                                child: const Icon(
-                                  Icons.check_circle,
-                                  color: Colors.green,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'NIK',
-                          widget: GlobalTextformfield(
-                            controller: controllerNik,
-                            hint: 'Isi NIK',
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Alamat Sesuai KTP',
-                          widget: GlobalTextformfield(
-                            controller: controllerAddress,
-                            hint: 'Isi Alamat',
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Provinsi',
-                          widget: GlobalDropdown(
-                            options: _provinces,
-                            selectedValue: _selectedProvice,
-                            onChanged: (province) {
-                              setSelectedProvince(province);
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Kota/Kabupaten',
-                          widget: GlobalDropdown(
-                            options: _cities,
-                            selectedValue: _selectedCity,
-                            onChanged: (city) {
-                              setSelectedCity(city);
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Kecamatan',
-                          widget: GlobalDropdown(
-                            options: _subDisctircts,
-                            selectedValue: _selectedSubDisctrict,
-                            onChanged: (subDistrict) {
-                              setSelectedSubDisctrict(subDistrict);
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Kelurahan',
-                          widget: GlobalDropdown(
-                            options: _wards,
-                            selectedValue: _selectedWard,
-                            onChanged: (ward) {
-                              setSelectedWard(ward);
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Kode POS',
-                          widget: GlobalTextformfield(
-                            controller: controllerPostalCode,
-                            hint: 'Isi dengan Kode Pos',
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    profile.nik = controllerNik.text;
-                                    profile.address = controllerAddress.text;
-                                    profile.province = _selectedProvice;
-                                    profile.city = _selectedCity;
-                                    profile.subDistrict = _selectedSubDisctrict;
-                                    profile.ward = _selectedWard;
-                                    profile.postalCode =
-                                        controllerPostalCode.text;
-                                    profileCubit.updateProfile(
-                                      profile,
-                                      imageFile: _ktpPicture,
-                                    );
-                                    setIndex(0);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      side: BorderSide(
-                                        color: primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'Sebelumnya',
-                                    style: TextStyle(color: primaryColor),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 16.0),
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    profile.nik = controllerNik.text;
-                                    profile.address = controllerAddress.text;
-                                    profile.province = _selectedProvice;
-                                    profile.city = _selectedCity;
-                                    profile.subDistrict = _selectedSubDisctrict;
-                                    profile.ward = _selectedWard;
-                                    profile.postalCode =
-                                        controllerPostalCode.text;
-                                    profileCubit.updateProfile(
-                                      profile,
-                                      imageFile: _ktpPicture,
-                                    );
-                                    setIndex(2);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: primaryColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'Selanjutnya',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    label: const Text(
-                      'Alamat Pribadi',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ),
+                  secondStep(profile, profileCubit),
                   // * STEP 3
-                  Step(
-                    isActive: currentStep >= 2,
-                    title: const SizedBox(),
-                    content: Column(
-                      children: [
-                        LabelWidget(
-                          label: 'Nama Usaha / perusahaan',
-                          widget: GlobalTextformfield(
-                            controller: controllerCompanyName,
-                            hint: 'Isi nama perusahaan / Usaha',
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Alamat Usaha / perusahaan',
-                          widget: GlobalTextformfield(
-                            controller: controllerCompanyAddress,
-                            hint: 'Isi Alamat Usaha / perusahaan',
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Jabatan',
-                          widget: GlobalDropdown(
-                            options: _positions,
-                            selectedValue: _selectedPosition,
-                            onChanged: (position) {
-                              setSelectedPosition(position);
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Lama Bekerja',
-                          widget: GlobalDropdown(
-                            options: _lengthWork,
-                            selectedValue: _selectedHowLongHasWork,
-                            onChanged: (work) {
-                              setSelectedHowLongHasWork(work);
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Sumber pendapatan',
-                          widget: GlobalDropdown(
-                            options: _incomeSource,
-                            selectedValue: _selectedIncomeSource,
-                            onChanged: (income) {
-                              setSelectedIncomeSource(income);
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Pendapatan kotor pertahun',
-                          widget: GlobalDropdown(
-                            options: _grossIncome,
-                            selectedValue: _selectedGrossIncome,
-                            onChanged: (income) {
-                              setSelectedGrossIncome(income);
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Nama bank',
-                          widget: GlobalDropdown(
-                            options: _bankNames,
-                            selectedValue: _selectedBankName,
-                            onChanged: (bankName) {
-                              setSelectedBankName(bankName);
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Cabang Bank',
-                          widget: GlobalTextformfield(
-                            controller: controllerBankBranch,
-                            hint: 'Isi Cabang Bank',
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Nomor Rekening',
-                          widget: GlobalTextformfield(
-                            controller: controllerBankAccountNumber,
-                            hint: 'Isi Nomor Rekening',
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        LabelWidget(
-                          label: 'Nama pemilik rekening',
-                          widget: GlobalTextformfield(
-                            controller: controllerBankAccountOwnerName,
-                            hint: 'Isi Nama Pemilik rekening',
-                          ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    profile.company =
-                                        controllerCompanyName.text;
-                                    profile.companyAddress =
-                                        controllerCompanyAddress.text;
-                                    profile.bankBranch =
-                                        controllerBankBranch.text;
-                                    profile.bankAccountOwnerName =
-                                        controllerBankAccountOwnerName.text;
-                                    profile.bankNumber =
-                                        controllerBankAccountNumber.text;
-                                    controllerBankAccountOwnerName.text;
-                                    profile.position = _selectedPosition;
-                                    profile.lengthOfWork =
-                                        _selectedHowLongHasWork;
-                                    profile.sourceIncome =
-                                        _selectedIncomeSource;
-                                    profile.grossIncomePerYear =
-                                        _selectedGrossIncome;
-                                    profile.bankName = _selectedBankName;
-                                    profileCubit.updateProfile(profile);
-                                    setIndex(1);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      side: BorderSide(
-                                        color: primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'Sebelumnya',
-                                    style: TextStyle(color: primaryColor),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 16.0),
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    // profile.nik = controllerNik.text;
-                                    // profile.address = controllerAddress.text;
-                                    // profile.province = _selectedProvice;
-                                    // profile.city = _selectedCity;
-                                    // profile.subDistrict = _selectedSubDisctrict;
-                                    // profile.ward = _selectedWard;
-                                    // profile.postalCode =
-                                    //     controllerPostalCode.text;
-                                    // profileCubit.updateProfile(
-                                    //   profile,
-                                    //   imageFile: _ktpPicture,
-                                    // );
-                                    profile.company =
-                                        controllerCompanyName.text;
-                                    profile.companyAddress =
-                                        controllerCompanyAddress.text;
-                                    profile.bankBranch =
-                                        controllerBankBranch.text;
-                                    profile.bankAccountOwnerName =
-                                        controllerBankAccountOwnerName.text;
-                                    profile.bankNumber =
-                                        controllerBankAccountNumber.text;
-                                    controllerBankAccountOwnerName.text;
-                                    profile.position = _selectedPosition;
-                                    profile.lengthOfWork =
-                                        _selectedHowLongHasWork;
-                                    profile.sourceIncome =
-                                        _selectedIncomeSource;
-                                    profile.grossIncomePerYear =
-                                        _selectedGrossIncome;
-                                    profile.bankName = _selectedBankName;
-                                    profileCubit.updateProfile(profile);
-                                    Navigator.pop(context);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: primaryColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'Simpan',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    label: const Text(
-                      'Informasi',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ),
+                  thridStep(profile, profileCubit, context),
                 ],
               ),
             );
@@ -731,6 +340,378 @@ class _ProfilePageState extends State<ProfilePage> {
           }
           return const Center(child: Text('No profiles'));
         },
+      ),
+    );
+  }
+
+  Step thridStep(
+      Profile profile, ProfileCubit profileCubit, BuildContext context) {
+    return Step(
+      isActive: currentStep >= 2,
+      title: const SizedBox(),
+      content: Column(
+        children: [
+          LabelWidget(
+            label: 'Nama Usaha / perusahaan',
+            widget: GlobalTextformfield(
+              controller: controllerCompanyName,
+              hint: 'Isi nama perusahaan / Usaha',
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Alamat Usaha / perusahaan',
+            widget: GlobalTextformfield(
+              controller: controllerCompanyAddress,
+              hint: 'Isi Alamat Usaha / perusahaan',
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Jabatan',
+            widget: GlobalDropdown(
+              options: _positions,
+              selectedValue: _selectedPosition,
+              onChanged: (position) {
+                setSelectedPosition(position);
+              },
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Lama Bekerja',
+            widget: GlobalDropdown(
+              options: _lengthWork,
+              selectedValue: _selectedHowLongHasWork,
+              onChanged: (work) {
+                setSelectedHowLongHasWork(work);
+              },
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Sumber pendapatan',
+            widget: GlobalDropdown(
+              options: _incomeSource,
+              selectedValue: _selectedIncomeSource,
+              onChanged: (income) {
+                setSelectedIncomeSource(income);
+              },
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Pendapatan kotor pertahun',
+            widget: GlobalDropdown(
+              options: _grossIncome,
+              selectedValue: _selectedGrossIncome,
+              onChanged: (income) {
+                setSelectedGrossIncome(income);
+              },
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Nama bank',
+            widget: GlobalDropdown(
+              options: _bankNames,
+              selectedValue: _selectedBankName,
+              onChanged: (bankName) {
+                setSelectedBankName(bankName);
+              },
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Cabang Bank',
+            widget: GlobalTextformfield(
+              controller: controllerBankBranch,
+              hint: 'Isi Cabang Bank',
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Nomor Rekening',
+            widget: GlobalTextformfield(
+              controller: controllerBankAccountNumber,
+              hint: 'Isi Nomor Rekening',
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Nama pemilik rekening',
+            widget: GlobalTextformfield(
+              controller: controllerBankAccountOwnerName,
+              hint: 'Isi Nama Pemilik rekening',
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      profile.company = controllerCompanyName.text;
+                      profile.companyAddress = controllerCompanyAddress.text;
+                      profile.bankBranch = controllerBankBranch.text;
+                      profile.bankAccountOwnerName =
+                          controllerBankAccountOwnerName.text;
+                      profile.bankNumber = controllerBankAccountNumber.text;
+                      controllerBankAccountOwnerName.text;
+                      profile.position = _selectedPosition;
+                      profile.lengthOfWork = _selectedHowLongHasWork;
+                      profile.sourceIncome = _selectedIncomeSource;
+                      profile.grossIncomePerYear = _selectedGrossIncome;
+                      profile.bankName = _selectedBankName;
+                      profileCubit.updateProfile(profile);
+                      setIndex(1);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(
+                          color: primaryColor,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      'Sebelumnya',
+                      style: TextStyle(color: primaryColor),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      profile.company = controllerCompanyName.text;
+                      profile.companyAddress = controllerCompanyAddress.text;
+                      profile.bankBranch = controllerBankBranch.text;
+                      profile.bankAccountOwnerName =
+                          controllerBankAccountOwnerName.text;
+                      profile.bankNumber = controllerBankAccountNumber.text;
+                      controllerBankAccountOwnerName.text;
+                      profile.position = _selectedPosition;
+                      profile.lengthOfWork = _selectedHowLongHasWork;
+                      profile.sourceIncome = _selectedIncomeSource;
+                      profile.grossIncomePerYear = _selectedGrossIncome;
+                      profile.bankName = _selectedBankName;
+                      profileCubit.updateProfile(profile);
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: const Text(
+                      'Simpan',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      label: const Text(
+        'Informasi',
+        style: TextStyle(fontSize: 14),
+      ),
+    );
+  }
+
+  Step secondStep(Profile profile, ProfileCubit profileCubit) {
+    return Step(
+      isActive: currentStep >= 1,
+      title: const SizedBox(),
+      content: Column(
+        children: [
+          InkWell(
+            onTap: () => _pickImage(profile, profileCubit),
+            child: Row(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 12.0),
+                  height: 40,
+                  width: 40,
+                  child: Icon(
+                    Icons.camera_front_rounded,
+                    color: primaryColor,
+                    size: 40,
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Upload KTP'),
+                    Visibility(
+                      visible: _ktpPicture != null,
+                      child: Text(
+                        '${getFileName(_ktpPicture?.path ?? '')}.${getFileExtension(_ktpPicture?.path ?? '')}',
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Visibility(
+                  visible: _ktpPicture != null,
+                  child: const Icon(
+                    Icons.check_circle,
+                    color: Colors.green,
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'NIK',
+            widget: GlobalTextformfield(
+              controller: controllerNik,
+              hint: 'Isi NIK',
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Alamat Sesuai KTP',
+            widget: GlobalTextformfield(
+              controller: controllerAddress,
+              hint: 'Isi Alamat',
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Provinsi',
+            widget: GlobalDropdown(
+              options: _provinces,
+              selectedValue: _selectedProvice,
+              onChanged: (province) {
+                setSelectedProvince(province);
+              },
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Kota/Kabupaten',
+            widget: GlobalDropdown(
+              options: _cities,
+              selectedValue: _selectedCity,
+              onChanged: (city) {
+                setSelectedCity(city);
+              },
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Kecamatan',
+            widget: GlobalDropdown(
+              options: _subDisctircts,
+              selectedValue: _selectedSubDisctrict,
+              onChanged: (subDistrict) {
+                setSelectedSubDisctrict(subDistrict);
+              },
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Kelurahan',
+            widget: GlobalDropdown(
+              options: _wards,
+              selectedValue: _selectedWard,
+              onChanged: (ward) {
+                setSelectedWard(ward);
+              },
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          LabelWidget(
+            label: 'Kode POS',
+            widget: GlobalTextformfield(
+              controller: controllerPostalCode,
+              hint: 'Isi dengan Kode Pos',
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      profile.nik = controllerNik.text;
+                      profile.address = controllerAddress.text;
+                      profile.province = _selectedProvice;
+                      profile.city = _selectedCity;
+                      profile.subDistrict = _selectedSubDisctrict;
+                      profile.ward = _selectedWard;
+                      profile.postalCode = controllerPostalCode.text;
+                      profileCubit.updateProfile(
+                        profile,
+                        imageFile: _ktpPicture,
+                      );
+                      setIndex(0);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(
+                          color: primaryColor,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      'Sebelumnya',
+                      style: TextStyle(color: primaryColor),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      profile.nik = controllerNik.text;
+                      profile.address = controllerAddress.text;
+                      profile.province = _selectedProvice;
+                      profile.city = _selectedCity;
+                      profile.subDistrict = _selectedSubDisctrict;
+                      profile.ward = _selectedWard;
+                      profile.postalCode = controllerPostalCode.text;
+                      profileCubit.updateProfile(
+                        profile,
+                        imageFile: _ktpPicture,
+                      );
+                      setIndex(2);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: const Text(
+                      'Selanjutnya',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+      label: const Text(
+        'Alamat Pribadi',
+        style: TextStyle(fontSize: 14),
       ),
     );
   }
